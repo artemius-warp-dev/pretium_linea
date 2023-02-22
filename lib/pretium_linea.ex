@@ -7,29 +7,29 @@ defmodule PretiumLinea do
   if it comes from the database, an external API or others.
   """
 
-  # TODO
-  # 1 Task async
-  # 2 Genservers
   # 3 Controllers
 
   # take form configs
-  def handle_offers() do
-    collection = [PretiumLinea.AFKLM.Handler, PretiumLinea.BA.Handler]
-
+  def handle_offers(companies, params) do
     Task.Supervisor.async_stream(
       PretiumLinea.TaskSupervisor,
-      collection,
+      companies,
       __MODULE__,
       :process,
-      [],
+      [params],
       ordered: false,
       on_timeout: :kill_task
     )
+    |> Enum.map(fn {:ok, result} -> result end)
     |> Enum.to_list()
+    |> get_min_offer()
   end
 
-  def process(handler) do
-    
+  def process(company, params) do
+    with {:ok, stream} <- PretiumLinea.Process.receive_data(company, params),
+         {:ok, state} <- process(stream, company.handler, %{}) do
+      get_min_offer(state.offers)
+    end
   end
 
   def process(stream, handler, state) do
@@ -38,13 +38,21 @@ defmodule PretiumLinea do
     |> Saxy.parse_stream(handler, state)
   end
 
-  # TODO move to utils
-  def get_min(offers) do
-    offers
-    |> Enum.reduce([], &build_price_list(&1.price, &2))
-    |> Enum.min()
+  def get_min_offer([]), do: {:error, :no_offers}
+
+  def get_min_offer([h | tail]) do
+    tail
+    |> Enum.reduce(h, &get_min_price(&1, &2))
   end
 
   # TODO currency fix
-  defp build_price_list(price_str, list), do: [String.to_float(price_str) | list]
+  defp get_min_price(offer, min) do
+    price_one = String.to_float(offer.price)
+    price_two = String.to_float(min.price)
+
+    cond do
+      price_one > price_two -> min
+      true -> offer
+    end
+  end
 end

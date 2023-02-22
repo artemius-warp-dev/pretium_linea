@@ -3,8 +3,6 @@ defmodule PretiumLinea.BA.Offer do
 end
 
 
-#TotalPrice/SimpleCurrencyPrice`
-
 defmodule PretiumLinea.BA.Handler do
   alias PretiumLinea.BA.Offer
 

@@ -9,3 +9,12 @@ defmodule PretiumLineaWeb.Router do
     pipe_through :api
   end
 end
+
+
+#TODO
+#Controller/Tests
+#Release/Docker/Configs
+#specs/openapi
+#letter
+
+#*mock logic
