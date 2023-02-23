@@ -15,11 +15,3 @@ defmodule PretiumLineaWeb.Router do
     get "/swaggerui", OpenApiSpex.Plug.SwaggerUI, path: "/openapi"
   end
 end
-
-# TODO
-# Controller/Tests
-# Release/Docker/Configs
-# specs/openapi
-# letter
-
-# *mock logic
