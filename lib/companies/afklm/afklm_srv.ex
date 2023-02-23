@@ -1,4 +1,4 @@
-defmodule PretiumLinea.AFKLM.Server do
+defmodule PretiumLinea.AFKL.Server do
   use GenServer
 
   def start_link(_) do
@@ -16,7 +16,7 @@ defmodule PretiumLinea.AFKLM.Server do
 
   @impl true
   def handle_call({:get, _params}, _from, state) do
-    stream = PretiumLinea.MockData.mock_afklm_response()
+    stream = PretiumLinea.MockData.mock_afkl_response()
 
     {:reply, stream, state}
   end

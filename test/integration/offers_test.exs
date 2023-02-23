@@ -6,7 +6,7 @@ defmodule PretiumLinea.OffersTest do
   setup do
     companies = [
       %PretiumLinea.BA{name: "BA", handler: PretiumLinea.BA.Handler},
-      %PretiumLinea.AFKLM{name: "AFKL", handler: PretiumLinea.AFKLM.Handler}
+      %PretiumLinea.AFKL{name: "AFKL", handler: PretiumLinea.AFKL.Handler}
     ]
 
     %{companies: companies}

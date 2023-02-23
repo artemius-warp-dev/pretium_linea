@@ -1,3 +1,3 @@
-defmodule PretiumLinea.AFKLM do
+defmodule PretiumLinea.AFKL do
   defstruct [:name, :handler]
 end

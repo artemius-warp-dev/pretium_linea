@@ -1,10 +1,11 @@
-defmodule PretiumLinea.AFKLM.Offer do
-  # TODO move to config
-  defstruct name: "AFKM", price: nil, currency: nil
+defmodule PretiumLinea.AFKL.Offer do
+  defstruct name: Application.compile_env(:pretium_linea, :companies)[:afkl].name,
+            price: nil,
+            currency: nil
 end
 
-defmodule PretiumLinea.AFKLM.Handler do
-  alias PretiumLinea.AFKLM.Offer
+defmodule PretiumLinea.AFKL.Handler do
+  alias PretiumLinea.AFKL.Offer
 
   @behaviour Saxy.Handler
 

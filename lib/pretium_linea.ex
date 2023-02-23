@@ -8,15 +8,16 @@ defmodule PretiumLinea do
   """
 
   def fetch_companies() do
+    config = Application.get_env(:pretium_linea, :companies)
+
     companies = [
-      %PretiumLinea.BA{name: "BA", handler: PretiumLinea.BA.Handler},
-      %PretiumLinea.AFKLM{name: "AFKL", handler: PretiumLinea.AFKLM.Handler}
+      %PretiumLinea.BA{name: config[:ba].name, handler: config[:ba].handler},
+      %PretiumLinea.AFKL{name: config[:afkl].name, handler: config[:afkl].handler}
     ]
 
     {:ok, companies}
   end
 
-  # take form configs
   def handle_offers(companies, params) do
     Task.Supervisor.async_stream(
       PretiumLinea.TaskSupervisor,

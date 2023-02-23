@@ -1,5 +1,7 @@
 defmodule PretiumLinea.BA.Offer do
-  defstruct name: "BA", price: nil, currency: nil
+  defstruct name: Application.compile_env(:pretium_linea, :companies)[:ba].name,
+            price: nil,
+            currency: nil
 end
 
 defmodule PretiumLinea.BA.Handler do

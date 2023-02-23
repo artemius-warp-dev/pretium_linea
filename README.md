@@ -1,18 +1,11 @@
 # PretiumLinea
 
-To start your Phoenix server:
+This is simple agregater mock service with single endpoint to minimal flyticket offer from 2 ariline companies.
 
-  * Install dependencies with `mix deps.get`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+#TODO answers to question
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+# Instalation
+1. git clone project
+2. mix compile && mix deps.get && openapispex
+3. mix test
+4. run release from docker with docker build .
