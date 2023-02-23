@@ -1,7 +1,7 @@
 defmodule PretiumLinea.AFKLMTest do
   use PretiumLineaWeb.ConnCase
 
-  @min_price "199.29"
+  @min_price 199.29
 
   setup do
     priv = :code.priv_dir(:pretium_linea)
@@ -27,14 +27,14 @@ defmodule PretiumLinea.AFKLMTest do
       |> PretiumLinea.process(PretiumLinea.AFKLM.Handler, %{})
 
     assert {:ok, state} = res
-    min = PretiumLinea.get_min_price(state.offers)
+    {:ok, min} = PretiumLinea.get_min_offer(state.offers)
     assert %PretiumLinea.AFKLM.Offer{price: @min_price, currency: "EUR"} = min
   end
 
   test "to process via protocol" do
     company = %PretiumLinea.AFKLM{name: "AFKLM", handler: PretiumLinea.AFKLM.Handler}
 
-    min = PretiumLinea.process(company, [])
+    {:ok, min} = PretiumLinea.process(company, [])
 
     assert %PretiumLinea.AFKLM.Offer{price: @min_price, currency: "EUR"} = min
   end

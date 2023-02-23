@@ -2,7 +2,6 @@ defmodule PretiumLinea.BA.Offer do
   defstruct name: "BA", price: nil, currency: nil
 end
 
-
 defmodule PretiumLinea.BA.Handler do
   alias PretiumLinea.BA.Offer
 
@@ -48,7 +47,7 @@ defmodule PretiumLinea.BA.Handler do
     new_state =
       case state.tag_name do
         "SimpleCurrencyPrice" ->
-          offer = Map.put(current_offer, :price, content)
+          offer = Map.put(current_offer, :price, String.to_float(content))
           %{state | offers: [offer | offers]}
 
         _other ->

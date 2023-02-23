@@ -1,5 +1,6 @@
 defmodule PretiumLinea.AFKLM.Offer do
-  defstruct name: "AFKM", price: nil, currency: nil #TODO move to config
+  # TODO move to config
+  defstruct name: "AFKM", price: nil, currency: nil
 end
 
 defmodule PretiumLinea.AFKLM.Handler do
@@ -47,7 +48,7 @@ defmodule PretiumLinea.AFKLM.Handler do
     new_state =
       case state.tag_name do
         "ns2:TotalAmount" ->
-          offer = Map.put(current_offer, :price, content)
+          offer = Map.put(current_offer, :price, String.to_float(content))
           %{state | offers: [offer | offers]}
 
         _other ->

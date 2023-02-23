@@ -7,7 +7,14 @@ defmodule PretiumLinea do
   if it comes from the database, an external API or others.
   """
 
-  # 3 Controllers
+  def fetch_companies() do
+    companies = [
+      %PretiumLinea.BA{name: "BA", handler: PretiumLinea.BA.Handler},
+      %PretiumLinea.AFKLM{name: "AFKL", handler: PretiumLinea.AFKLM.Handler}
+    ]
+
+    {:ok, companies}
+  end
 
   # take form configs
   def handle_offers(companies, params) do
@@ -20,8 +27,7 @@ defmodule PretiumLinea do
       ordered: false,
       on_timeout: :kill_task
     )
-    |> Enum.map(fn {:ok, result} -> result end)
-    |> Enum.to_list()
+    |> Enum.reduce([], fn {:ok, result}, acc -> fetch_result(result, acc) end)
     |> get_min_offer()
   end
 
@@ -41,17 +47,20 @@ defmodule PretiumLinea do
   def get_min_offer([]), do: {:error, :no_offers}
 
   def get_min_offer([h | tail]) do
-    tail
-    |> Enum.reduce(h, &get_min_price(&1, &2))
+    min_offer =
+      tail
+      |> Enum.reduce(h, &get_min_price(&1, &2))
+
+    {:ok, min_offer}
   end
+
+  defp fetch_result({:error, _}, acc), do: acc
+  defp fetch_result({:ok, res}, acc), do: [res | acc]
 
   # TODO currency fix
   defp get_min_price(offer, min) do
-    price_one = String.to_float(offer.price)
-    price_two = String.to_float(min.price)
-
     cond do
-      price_one > price_two -> min
+      offer.price > min.price -> min
       true -> offer
     end
   end

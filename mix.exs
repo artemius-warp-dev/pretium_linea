@@ -38,8 +38,9 @@ defmodule PretiumLinea.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:saxy, "~> 1.5"}
-
+      {:saxy, "~> 1.5"},
+      {:open_api_spex, "~> 3.16"},
+      {:ymlr, "~> 2.0"}
     ]
   end
 

@@ -1,6 +1,5 @@
 defmodule PretiumLinea.MockData do
-
-  #TODO mock response. String to stream
+  # TODO mock response. String to stream
   def mock_afklm_response() do
     priv = :code.priv_dir(:pretium_linea)
     filename = "afklm.xml"
@@ -12,5 +11,4 @@ defmodule PretiumLinea.MockData do
     filename = "ba.xml"
     File.stream!("#{priv}/#{filename}")
   end
-
 end
