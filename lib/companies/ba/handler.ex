@@ -1,10 +1,16 @@
 defmodule PretiumLinea.BA.Offer do
+  @moduledoc """
+  Struct which contains offer from BA company
+  """
   defstruct name: Application.compile_env(:pretium_linea, :companies)[:ba].name,
             price: nil,
             currency: nil
 end
 
 defmodule PretiumLinea.BA.Handler do
+  @moduledoc """
+  Handler implementation to parse XML for BA company with saxy library
+  """
   alias PretiumLinea.BA.Offer
 
   @behaviour Saxy.Handler

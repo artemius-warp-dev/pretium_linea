@@ -1,4 +1,7 @@
 defmodule PretiumLineaWeb.OfferView do
+  @moduledoc """
+  View to render and present data
+  """
   use PretiumLineaWeb, :view
 
   def render("cheapest_offer.json", %{offer: min_offer}) do

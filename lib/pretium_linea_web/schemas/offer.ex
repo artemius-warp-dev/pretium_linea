@@ -1,7 +1,12 @@
 defmodule PretiumLineaWeb.Schema.Offers do
+  @moduledoc """
+  Module to define schemas for offers api specs.
+  """
+
   alias OpenApiSpex.Schema
 
   defmodule Offer do
+    @moduledoc false
     require OpenApiSpex
 
     OpenApiSpex.schema(%{
@@ -16,6 +21,7 @@ defmodule PretiumLineaWeb.Schema.Offers do
   end
 
   defmodule CheapestOffer do
+    @moduledoc false
     require OpenApiSpex
 
     OpenApiSpex.schema(%{
@@ -29,6 +35,7 @@ defmodule PretiumLineaWeb.Schema.Offers do
   end
 
   defmodule CheapestOfferResponse do
+    @moduledoc false
     require OpenApiSpex
 
     OpenApiSpex.schema(%{

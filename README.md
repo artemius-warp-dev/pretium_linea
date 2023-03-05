@@ -2,6 +2,10 @@
 
 This is a simple aggregator mock service with a single endpoint to fetch minimal flight ticket offer from 2 airline companies.
 
+
+# Test coverage
+87.1%. You can see test report in `cover/excoveralls.html`
+
 # Notes
 1. The library sax is used to parse XML. I created handlers for each company. I think it may be better to think about the protocol for the handlers because the behaviors of the handlers are almost the same.
 2. I created GenServers per company because I think that gen_servers might be useful for caching requests from airline companies and something else for managing the lifecycle of dataflow from a company. And of course, it is one of the fault tolerance aspects because those gen_servers are managed by a supervisor

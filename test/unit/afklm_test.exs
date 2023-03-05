@@ -15,7 +15,7 @@ defmodule PretiumLinea.AFKLTest do
   test "to get list of parsed offers", %{path: path} do
     res =
       File.stream!(path)
-      |> PretiumLinea.process(PretiumLinea.AFKL.Handler, %{})
+      |> PretiumLinea.process_stream(PretiumLinea.AFKL.Handler, %{})
 
     assert {:ok, state} = res
     assert length(state.offers) > 0
@@ -24,7 +24,7 @@ defmodule PretiumLinea.AFKLTest do
   test "to get minium from parsed offers", %{path: path} do
     res =
       File.stream!(path)
-      |> PretiumLinea.process(PretiumLinea.AFKL.Handler, %{})
+      |> PretiumLinea.process_stream(PretiumLinea.AFKL.Handler, %{})
 
     assert {:ok, state} = res
     {:ok, min} = PretiumLinea.get_min_offer(state.offers)

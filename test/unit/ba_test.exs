@@ -15,7 +15,7 @@ defmodule PretiumLinea.BATest do
   test "to get list of parsed offers", %{path: path} do
     res =
       File.stream!(path)
-      |> PretiumLinea.process(PretiumLinea.BA.Handler, %{})
+      |> PretiumLinea.process_stream(PretiumLinea.BA.Handler, %{})
 
     assert {:ok, state} = res
 
@@ -25,7 +25,7 @@ defmodule PretiumLinea.BATest do
   test "to get minium from parsed offers", %{path: path} do
     res =
       File.stream!(path)
-      |> PretiumLinea.process(PretiumLinea.BA.Handler, %{})
+      |> PretiumLinea.process_stream(PretiumLinea.BA.Handler, %{})
 
     assert {:ok, state} = res
     {:ok, min} = PretiumLinea.get_min_offer(state.offers)
