@@ -1,4 +1,7 @@
 defmodule PretiumLineaWeb.OfferController do
+  @moduledoc """
+  Module with API endpoints to represent logic of offer lifecycle
+  """
   use PretiumLineaWeb, :controller
   use OpenApiSpex.ControllerSpecs
 

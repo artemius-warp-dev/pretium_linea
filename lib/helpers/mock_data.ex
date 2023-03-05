@@ -1,4 +1,6 @@
 defmodule PretiumLinea.MockData do
+  @moduledoc false
+
   # TODO mock response. String to stream
   def mock_afkl_response() do
     priv = :code.priv_dir(:pretium_linea)

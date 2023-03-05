@@ -1,4 +1,7 @@
 defmodule PretiumLineaWeb.ApiSpec do
+  @moduledoc """
+  Module to define OpenApiSpex behaviour
+  """
   alias OpenApiSpex.{Info, OpenApi, Paths, Server}
   alias PretiumLineaWeb.{Endpoint, Router}
   @behaviour OpenApi
@@ -11,7 +14,7 @@ defmodule PretiumLineaWeb.ApiSpec do
         Server.from_endpoint(Endpoint)
       ],
       info: %Info{
-        title: "My App",
+        title: "PretiumLinea",
         version: "1.0"
       },
       # Populate the paths from a phoenix router

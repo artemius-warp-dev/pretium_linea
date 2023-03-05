@@ -14,8 +14,8 @@ defmodule PretiumLinea.Application do
       {Phoenix.PubSub, name: PretiumLinea.PubSub},
       # Start the Endpoint (http/https)
       PretiumLineaWeb.Endpoint,
-      {PretiumLinea.BA.Server, []},
-      {PretiumLinea.AFKL.Server, []},
+      {PretiumLinea.BA.Server, %{}},
+      {PretiumLinea.AFKL.Server, %{}},
       {Task.Supervisor, [name: PretiumLinea.TaskSupervisor, max_restarts: 3]}
       # Start a worker by calling: PretiumLinea.Worker.start_link(arg)
       # {PretiumLinea.Worker, arg}

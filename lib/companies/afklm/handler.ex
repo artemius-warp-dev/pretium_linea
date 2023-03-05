@@ -1,10 +1,17 @@
 defmodule PretiumLinea.AFKL.Offer do
+  @moduledoc """
+  Struct which contains offer from AFKL company
+  """
+
   defstruct name: Application.compile_env(:pretium_linea, :companies)[:afkl].name,
             price: nil,
             currency: nil
 end
 
 defmodule PretiumLinea.AFKL.Handler do
+  @moduledoc """
+  Handler implementation to parse XML for AFKL company with saxy library
+  """
   alias PretiumLinea.AFKL.Offer
 
   @behaviour Saxy.Handler

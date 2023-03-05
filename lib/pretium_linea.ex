@@ -1,12 +1,24 @@
 defmodule PretiumLinea do
   @moduledoc """
-  PretiumLinea keeps the contexts that define your domain
-  and business logic.
-
-  Contexts are also responsible for managing your data, regardless
-  if it comes from the database, an external API or others.
+  Module for placing business logic to fetch minimal offer
   """
 
+  use PretiumLinea.Types
+
+  @typedoc """
+  Data processing stream
+  """
+  @type stream :: Enumerable.t()
+
+  @typedoc """
+  Offer struct from processing
+  """
+  @type offer :: %PretiumLinea.AFKL.Offer{} | %PretiumLinea.BA.Offer{}
+
+  @doc """
+  Fetching companies whith their configuration to processing
+  """
+  @spec fetch_companies() :: {:ok, list()}
   def fetch_companies() do
     config = Application.get_env(:pretium_linea, :companies)
 
@@ -18,6 +30,10 @@ defmodule PretiumLinea do
     {:ok, companies}
   end
 
+  @doc """
+  Handle offer form multiple companies with parameters from controller
+  """
+  @spec handle_offers(list(), map()) :: {:ok, offer} | {:error, :no_offers}
   def handle_offers(companies, params) do
     Task.Supervisor.async_stream(
       PretiumLinea.TaskSupervisor,
@@ -32,19 +48,32 @@ defmodule PretiumLinea do
     |> get_min_offer()
   end
 
+  @doc """
+  Processing offers from companies to get minimal
+  """
+  @spec process(company, params) :: {:ok, offer} | {:error, atom}
   def process(company, params) do
     with {:ok, stream} <- PretiumLinea.Process.receive_data(company, params),
-         {:ok, state} <- process(stream, company.handler, %{}) do
+         {:ok, state} <- process_stream(stream, company.handler, %{}) do
       get_min_offer(state.offers)
     end
   end
 
-  def process(stream, handler, state) do
+  @doc """
+  Processing stream of offers
+  """
+  @spec process_stream(stream, module, params) :: {:ok, term} | any
+  def process_stream(stream, handler, state) do
     stream
     |> Stream.map(&String.trim/1)
     |> Saxy.parse_stream(handler, state)
   end
 
+  @doc """
+  Getting minimal offer from list of offers
+  """
+  @spec get_min_offer(list) :: {:ok, offer} | {:error, :no_offers}
+  def get_min_offer(list)
   def get_min_offer([]), do: {:error, :no_offers}
 
   def get_min_offer([h | tail]) do
@@ -59,10 +88,6 @@ defmodule PretiumLinea do
   defp fetch_result({:ok, res}, acc), do: [res | acc]
 
   # TODO currency fix
-  defp get_min_price(offer, min) do
-    cond do
-      offer.price > min.price -> min
-      true -> offer
-    end
-  end
+  defp get_min_price(offer, min) when offer.price > min.price, do: min
+  defp get_min_price(offer, _min), do: offer
 end

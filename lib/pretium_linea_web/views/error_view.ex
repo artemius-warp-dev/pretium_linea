@@ -1,4 +1,5 @@
 defmodule PretiumLineaWeb.ErrorView do
+  @moduledoc false
   use PretiumLineaWeb, :view
 
   # If you want to customize a particular status code

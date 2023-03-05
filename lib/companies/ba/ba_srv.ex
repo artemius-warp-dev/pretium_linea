@@ -1,10 +1,22 @@
 defmodule PretiumLinea.BA.Server do
+  @moduledoc """
+  Module to control dataflow lifecycle of BA company
+  """
   use GenServer
+  use PretiumLinea.Types
 
-  def start_link(_) do
-    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+  @doc """
+  Start server to handle requests to company
+  """
+  @spec start_link(map) :: term
+  def start_link(init_state) do
+    GenServer.start_link(__MODULE__, init_state, name: __MODULE__)
   end
 
+  @doc """
+  Direct call to BA's company API
+  """
+  @spec get(params) :: term
   def get(params) do
     GenServer.call(__MODULE__, {:get, params})
   end

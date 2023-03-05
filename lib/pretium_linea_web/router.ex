@@ -1,4 +1,5 @@
 defmodule PretiumLineaWeb.Router do
+  @moduledoc false
   use PretiumLineaWeb, :router
 
   pipeline :api do

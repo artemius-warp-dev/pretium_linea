@@ -15,12 +15,10 @@ ENV MIX_ENV=prod
 # install mix dependencies
 COPY mix.exs mix.lock ./
 COPY config config
-RUN mix do deps.get, deps.compile
-
 # compile and build release
-COPY lib lib
-RUN mix do compile, release
+RUN mix do deps.get, deps.compile, compile, release
 
+COPY lib lib
 COPY _build/prod/rel/pretium_linea ./
 
 ENV HOME=/app

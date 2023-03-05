@@ -10,7 +10,13 @@ defmodule PretiumLinea.MixProject do
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      dialyzer: [
+        plt_add_deps: :transitive,
+        remove_defaults: [:unknown]
+      ],
+      docs: docs(),
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
@@ -40,7 +46,11 @@ defmodule PretiumLinea.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:saxy, "~> 1.5"},
       {:open_api_spex, "~> 3.16"},
-      {:ymlr, "~> 2.0"}
+      {:ymlr, "~> 2.0"},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
+      {:credo, "> 0.9.2", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 0.5", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.16", only: :test}
     ]
   end
 
@@ -53,6 +63,49 @@ defmodule PretiumLinea.MixProject do
   defp aliases do
     [
       setup: ["deps.get"]
+    ]
+  end
+
+  defp docs do
+    [
+      groups_for_modules: groups_for_modules()
+    ]
+  end
+
+  defp groups_for_modules do
+    [
+      Core: [
+        PretiumLinea,
+        PretiumLinea.Process,
+        PretiumLinea.Types
+      ],
+      AFKL: [
+        PretiumLinea.AFKL,
+        PretiumLinea.AFKL.Server,
+        PretiumLinea.AFKL.Offer,
+        PretiumLinea.AFKL.Handler
+      ],
+      BA: [
+        PretiumLinea.BA,
+        PretiumLinea.BA.Server,
+        PretiumLinea.BA.Offer,
+        PretiumLinea.BA.Handler
+      ],
+      API: [
+        PretiumLineaWeb.OfferController,
+        PretiumLineaWeb.OfferView,
+        PretiumLineaWeb.ApiSpec
+      ],
+      Phoenix: [
+        PretiumLineaWeb,
+        PretiumLineaWeb.Endpoint,
+        PretiumLineaWeb.ErrorHelpers,
+        PretiumLineaWeb.Router,
+        PretiumLineaWeb.Router.Helpers
+      ],
+      Schemas: [
+        PretiumLineaWeb.Schema.Offers
+      ]
     ]
   end
 end
