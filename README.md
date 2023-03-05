@@ -27,8 +27,7 @@ You also can see API swagger-ui documentation if you go to `http://localhost:400
 1.  git clone project
 2. `mix compile && mix deps.get && mix openapi.spec.json --spec PretiumLineaWeb.ApiSpec`
 3. `mix test`
-4. `MIX_ENV=prod mix release`
-5. build release `docker build -t pretium_linea . `
-6. run release 
+4. build release `docker build -t pretium_linea . `
+5. run release 
 `docker run --rm -it --network=host pretium_linea`  
    Now you can go to browser and run request  `http://localhost:4000/findCheapestOffer?origin=BER&destination=LHR&departureDate=2019-07-17`
