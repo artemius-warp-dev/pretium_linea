@@ -4,6 +4,7 @@ This is a simple aggregator mock service with a single endpoint to fetch minimal
 
 
 # Test coverage
+Run `MIX_ENV=test mix coveralls.html`  
 87.1%. You can see test report in `cover/excoveralls.html`
 
 # Documentation
