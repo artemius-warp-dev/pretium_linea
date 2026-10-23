@@ -1,33 +1,57 @@
 # PretiumLinea
 
-This is a simple aggregator mock service with a single endpoint to fetch minimal flight ticket offer from 2 airline companies.
+[![CI](https://github.com/artemius-warp-dev/pretium_linea/actions/workflows/ci.yml/badge.svg)](https://github.com/artemius-warp-dev/pretium_linea/actions/workflows/ci.yml)
 
+A flight-offer aggregator: one HTTP endpoint asks several airlines for offers in
+parallel, parses their XML responses, and returns the cheapest one.
 
-# Test coverage
-Run `MIX_ENV=test mix coveralls.html`  
-87.1%. You can see test report in `cover/excoveralls.html`
+```
+GET /findCheapestOffer?origin=BER&destination=LHR&departureDate=2019-07-17
+```
 
-# Documentation
-Run `mix docs`. That command will generate documentation in `docs` folder. You can see it with browser.
-You also can see API swagger-ui documentation if you go to `http://localhost:4000/swaggerui`
+The airlines are mocked; the interesting part is how the fan-out behaves when one of
+them is slow or broken.
 
+## Design
 
-# Notes
-1. The library sax is used to parse XML. I created handlers for each company. I think it may be better to think about the protocol for the handlers because the behaviors of the handlers are almost the same.
-2. I created GenServers per company because I think that gen_servers might be useful for caching requests from airline companies and something else for managing the lifecycle of dataflow from a company. And of course, it is one of the fault tolerance aspects because those gen_servers are managed by a supervisor
-3. `Task.Supervisor.async_stream` for concurrency processing response from airlines. I created a default TaskSuperviser with `max_retries:3` for crashed tasks and `kill_task` for a timeout. That is for fault tolerance.
-4. `OpenApiSpec` for some scheme validation and swagger_ui capability
+- **One `GenServer` per airline**, under a supervisor. Each one owns its company's
+  lifecycle — a natural place for request caching and rate limiting later — and a
+  crash in one company's code can't take down the others.
+- **Fan-out with `Task.Supervisor.async_stream`**, with a timeout and `on_timeout: :kill_task`.
+  A slow or crashing airline is dropped from the result instead of failing the
+  whole request.
+- **Streaming XML parsing with [Saxy](https://hexdocs.pm/saxy)**, with one SAX handler per
+  airline.
+- **OpenAPI spec** ([open_api_spex](https://hexdocs.pm/open_api_spex)) for request
+  validation, plus Swagger UI at `/swaggerui`.
 
-# Requirenments
-1. Erlang/OTP 25
-2. Elixir 1.14.2
+### What I'd change next
 
+The per-airline SAX handlers are nearly identical. They should share a behaviour with
+only the field mapping differing, so that adding an airline is a config change rather than
+a new module.
 
-# Instalation
-1.  git clone project
-2. `mix compile && mix deps.get && mix openapi.spec.json --spec PretiumLineaWeb.ApiSpec`
-3. `mix test`
-4. build release `docker build -t pretium_linea . `
-5. run release 
-`docker run --rm -it --network=host pretium_linea`  
-   Now you can go to browser and run request  `http://localhost:4000/findCheapestOffer?origin=BER&destination=LHR&departureDate=2019-07-17`
+## Running
+
+Requires Erlang/OTP 26 and Elixir 1.17 (CI runs on these).
+
+```bash
+mix deps.get
+mix openapi.spec.json --spec PretiumLineaWeb.ApiSpec
+mix test
+mix phx.server          # http://localhost:4000/swaggerui
+```
+
+Or as a release in Docker:
+
+```bash
+docker build -t pretium_linea .
+docker run --rm -it --network=host pretium_linea
+```
+
+## Tests and docs
+
+```bash
+MIX_ENV=test mix coveralls.html   # report in cover/excoveralls.html
+mix docs                          # HTML docs in doc/
+```
