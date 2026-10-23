@@ -44,7 +44,11 @@ defmodule PretiumLinea do
       ordered: false,
       on_timeout: :kill_task
     )
-    |> Enum.reduce([], fn {:ok, result}, acc -> fetch_result(result, acc) end)
+    |> Enum.reduce([], fn
+      {:ok, result}, acc -> fetch_result(result, acc)
+      # A timed-out or crashed company is skipped, not fatal for the whole request.
+      {:exit, _reason}, acc -> acc
+    end)
     |> get_min_offer()
   end
 
